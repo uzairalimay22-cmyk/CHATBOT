@@ -1,5 +1,4 @@
-$content = @'
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+﻿from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from chatbot import get_response
 from history import save_message, get_history, clear_history
 import os
@@ -89,4 +88,3 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False)
 '@
-$content | Out-File -FilePath "C:\Users\Uzair ali\Desktop\AI chatbot\app.py" -Encoding utf8
