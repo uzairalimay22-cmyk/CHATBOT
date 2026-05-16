@@ -1,1 +1,1 @@
-﻿web: python app.py
+﻿"web: python app.py" | Out-File -FilePath Procfile -Encoding utf8 -NoNewline

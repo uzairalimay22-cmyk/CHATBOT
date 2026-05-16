@@ -1,75 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Chatbot</title>
+  <title>Groq AI Chatbot</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
 </head>
 <body>
-
   <div class="bg-orbs">
     <div class="orb orb1"></div>
     <div class="orb orb2"></div>
     <div class="orb orb3"></div>
   </div>
 
-  <div class="chat-wrapper">
+  <div class="app-layout">
 
-    <!-- Header -->
-    <div class="chat-header">
-      <div class="bot-info">
-        <div class="bot-avatar">
-          <span class="avatar-icon">⚡</span>
-          <span class="status-dot"></span>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">
+          <span>💬</span> History
         </div>
-        <div class="bot-text">
-          <h1>Groq AI</h1>
-          <p>Powered by LLaMA 3 · Always Online</p>
-        </div>
+        <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
       </div>
-      <button class="clear-btn" onclick="clearChat()">Clear</button>
+      <div class="sidebar-user">
+        <div class="user-avatar">{{ username[0].upper() }}</div>
+        <div class="user-info">
+          <span class="user-name">{{ username }}</span>
+          <span class="user-label">Logged in</span>
+        </div>
+        <a href="/logout" class="logout-btn">Logout</a>
+      </div>
+      <div class="sidebar-actions">
+        <button class="new-chat-btn" onclick="newChat()">+ New Chat</button>
+        <button class="clear-history-btn" onclick="clearAllHistory()">Clear All</button>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="history-loading">Loading...</div>
+      </div>
     </div>
 
-    <!-- Messages -->
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot-message">
+    <!-- Main Chat -->
+    <div class="chat-wrapper">
+      <div class="chat-header">
+        <div class="header-left">
+          <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+          <div class="bot-info">
+            <div class="bot-avatar">
+              <span class="avatar-icon">⚡</span>
+              <span class="status-dot"></span>
+            </div>
+            <div class="bot-text">
+              <h1>Groq AI</h1>
+              <p>Powered by LLaMA 3 · Always Online</p>
+            </div>
+          </div>
+        </div>
+        <button class="clear-btn" onclick="clearChat()">Clear</button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot-message">
+          <div class="message-avatar">⚡</div>
+          <div class="message-bubble">
+            Hey <b>{{ username }}</b>! I'm your AI assistant. Your chats are saved automatically. Ask me anything! 🚀
+          </div>
+        </div>
+      </div>
+
+      <div class="typing-indicator" id="typingIndicator">
         <div class="message-avatar">⚡</div>
-        <div class="message-bubble">
-          Hey there! I'm your AI assistant powered by Groq. Ask me anything — I'm super fast! 🚀
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+      </div>
+
+      <div class="chat-input-area">
+        <div class="input-container">
+          <textarea id="userInput" placeholder="Type your message..." rows="1"
+            onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
         </div>
+        <p class="input-hint">Press Enter to send · Shift+Enter for new line</p>
       </div>
     </div>
-
-    <!-- Typing Indicator -->
-    <div class="typing-indicator" id="typingIndicator">
-      <div class="message-avatar">⚡</div>
-      <div class="typing-dots">
-        <span></span><span></span><span></span>
-      </div>
-    </div>
-
-    <!-- Input -->
-    <div class="chat-input-area">
-      <div class="input-container">
-        <textarea
-          id="userInput"
-          placeholder="Type your message..."
-          rows="1"
-          onkeydown="handleKey(event)"
-          oninput="autoResize(this)"
-        ></textarea>
-        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <line x1="22" y1="2" x2="11" y2="13"></line>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-          </svg>
-        </button>
-      </div>
-      <p class="input-hint">Press Enter to send · Shift+Enter for new line</p>
-    </div>
-
   </div>
 
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
